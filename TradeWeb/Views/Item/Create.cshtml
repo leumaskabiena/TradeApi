@@ -1,0 +1,188 @@
+﻿@using System.Web.UI.WebControls
+@model Trade.Model.ModelView.ItemModelview
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    body {
+         background-color: #330000;
+        color: #000000;
+        line-height: 1.4;
+    }
+
+    .div1 a.current {
+        color: #ccc;
+    }
+
+    .div1 a, .div2 a {
+        color: #ff9900;
+    }
+
+    .div2 p {
+        padding: 20px 0;
+    }
+    .dynamicing {
+        height: 100px;
+        margin: 10px;
+    }
+</style>
+
+@using (Html.BeginForm("Create", "Item", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-xs-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Create Trade</div>
+            <table class="table table-responsive" border="0">
+                <tr>
+                    <td>
+                        <div class="form-horizontal">
+                            <div class="col-md-6">
+                                <div class="form-group">
+
+
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.ItemName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.ItemName, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.ItemName, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group" style="align-content:flex-end">
+                                    @Html.LabelFor(model => model.ItemPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.ItemPrice, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.ItemPrice, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.ItemDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.TextAreaFor(model => model.ItemDescription, 5, 50, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.ItemDescription, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group" style="align-items:flex-start">
+                                    @Html.Label("Image", htmlAttributes: new { @class = "control -label col-md-2" })
+                                    <div class="col-md-10">
+                                        @*<input type="file" id="imageBrowes" />*@
+                                        <input type="file" id="imageBrowes" name="ImageFile" onchange="loadFile(event)" multiple />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-4">
+
+                                <div id="imgMultiplePreview" class="thumbnail">
+
+                                </div>
+
+                               
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center">
+                        <div class="form-group">
+                            <input type="submit" value="Create Trade" class="popup btn btn-primary" />
+                        </div>
+                    </td>
+
+
+
+
+                </tr>
+            </table>
+        </div>
+    </div>
+
+}
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+        $("#imageBrowes").change(function () {
+
+            var File = this.files;
+
+            if (File && File[0]) {
+                ReadImage(File[0]);
+            }
+
+        })
+
+    })
+
+    var loadFile = function (event) {
+        var files = event.target.files;
+        for (var i = 0; i < files.length; i++) {
+            $("#imgMultiplePreview").append("<img src='" + URL.createObjectURL(event.target.files[i]) + "' class='dynamicing'/>");
+        }
+    }
+
+
+    var ReadImage = function (file) {
+
+        var reader = new FileReader;
+        var image = new Image;
+
+        reader.readAsDataURL(file);
+        reader.onload = function (_file) {
+
+            image.src = _file.target.result;
+            image.onload = function () {
+
+                var height = this.height;
+                var width = this.width;
+                var type = file.type;
+                var size = ~~(file.size / 1024) + "KB";
+
+                $("#targetImg").attr('src', _file.target.result);
+                $("#descrip").text("Size:" + size + ", " + height + "X " + width + ", " + type + "");
+                $("#imgPreview").show();
+
+            }
+
+        }
+
+    }
+
+    var ClearPreview = function () {
+        $("#imageBrowes").val('');
+        $("#description").text('');
+        $("#imgPreview").hide();
+
+    }
+
+    var Uploadimage = function () {
+
+        var file = $("#imageBrowes").get(0).files;
+
+        var data = new FormData;
+        data.append("ImageFile", file[0]);
+        data.append("ProductName", "SamsungA8");
+
+        $.ajax({
+
+            type: "Post",
+            url: "/Test/ImageUpload",
+            data: data,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                ClearPreview();
+
+                $("#uploadedImage").append('<img src="/UploadedImage/' + response + '" class="img-responsive thumbnail"/>');
+            }
+        })
+    }
+
+</script>

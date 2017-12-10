@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Trade.Model.ModelView.ItemWithImageModelView>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(model => model.ItemName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ItemPrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ItemDescription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ItemRef)
+        </th>
+        <th>
+            Image
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemRef)
+            </td>
+            <td>
+                @if (item.imgByte != null)
+                {
+                    var base64 = Convert.ToBase64String(item.imgByte);
+                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                    <a id="ShowImage" class="fancybox-button" data-rel="fancybox-button"
+                       title="Photo" href="@imgSrc">
+                        <div class="zoom">
+                            <img src="@imgSrc" class="imgBox img-rounded" style="width:100px; height:70px" />
+                            <div class="zoom-icon"></div>
+                        </div>
+                    </a>
+                }
+
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ItemRef }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+    }
+
+</table>

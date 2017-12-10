@@ -1,0 +1,80 @@
+﻿@model IEnumerable<Trade.Model.ModelView.BetModelView>
+<style>
+    body {
+        background-color: #330000;
+        color: #000000;
+        line-height: 1.4;
+    }
+
+    .div1 a.current {
+        color: #ccc;
+    }
+
+    .div1 a, .div2 a {
+        color: #ff9900;
+    }
+
+    .div2 p {
+        padding: 20px 0;
+    }
+</style>
+
+<div class="col-xs-12">
+    <div class="panel panel-primary">
+        <div class="panel-heading">My Notification</div>
+        <div align="center">
+            <ol class="breadcrumb">
+                <li class="active">
+                    <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("Create")';return false;" disabled><span class="glyphicon "></span>Demand</button>
+                </li>
+                <li class="x">
+                    <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("GetUpdatedBet")';return false;"><span class="glyphicon "></span>Reply</button>
+                </li>
+            </ol>
+        </div>
+        <div class="panel-body">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.itemref)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ItemName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Newprice)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.BetterName)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.itemref)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ItemName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Newprice)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BetterName)
+                        </td>
+
+                        <td>
+                            @Html.ActionLink("More", "Details", new { id = item.itemref }, new { title = "View Details", @class = " btn btn-default glyphicon glyphicon-eye-open details view" })
+                            @Html.ActionLink("Accept", "Accept", new { id = item.itemref }, new { title = "Accept Bet", @class = "btn btn-default glyphicon glyphicon-check" })
+                            @Html.ActionLink("Decline", "Decline", new { id = item.itemref }, new { title = "Decline Bet", @class = "btn btn-default glyphicon glyphicon-unchecked" })
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+</div>

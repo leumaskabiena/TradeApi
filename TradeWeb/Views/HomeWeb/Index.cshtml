@@ -1,0 +1,70 @@
+﻿
+@model IEnumerable<Trade.Model.ModelView.SliderModelView>
+<style>
+    body {
+        background-color: #330000;
+        color: #ffccff;
+        line-height: 1.4;
+    }
+
+    .div1 a.current {
+        color: #ccc;
+    }
+
+    .div1 a, .div2 a {
+        color: #ff9900;
+    }
+
+    .div2 p {
+        padding: 20px 0;
+    }
+</style>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trade</title>
+    <link href="~/Content/Asset/themes/2/js-image-slider.css" rel="stylesheet" type="text/css" />
+    <script src="~/Content/Asset/themes/2/js-image-slider.js" type="text/javascript"></script>
+    <link href="generic.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="div1 glyphicon-align-center">
+        <h2>Recent Trade</h2>
+        @*<p>
+                Demos: <a href="demo1.html">1</a><a href="demo2.html" class="current">2</a><a href="demo3.html">3</a><a href="demo4.html">4</a>
+                <a href="demo5.html">5</a><a href="demo6.html">6</a><a href="demo7.html">7</a><a href="demo8.html">8</a>
+            </p>*@
+    </div>
+
+    <div id="sliderFrame">
+        <div id="slider">
+            @foreach (var item in Model)
+            {
+                <a class="lazyImage"
+                   href="@item.src"
+                   title="@item.title">
+                    @item.description
+                </a>
+            }
+        </div>
+        <!--thumbnails-->
+        @foreach (var item in Model)
+            {
+            <div id="thumbs">
+                <div class="thumb">
+                    <div class="frame">
+                        <a href="@Url.Action("Details","Item", new {  id=item.id })"><img src="@item.src" /></a>
+                    </div>
+                    <div class="thumb-content"><p>@Html.ActionLink(@item.title, "Details", "Item", new { id = item.id }) </p>@item.description</div>
+                    <div style="clear:both;"></div>
+                </div>
+
+            </div>
+        }
+
+        <!--clear above float:left elements. It is required if above #slider is styled as float:left. -->
+        <div style="clear:both;height:0;"></div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+﻿@using Microsoft.AspNet.Identity
+@using Trade.BusinessLogic.Business
+
+@if (Request.IsAuthenticated)
+{
+
+    using (Html.BeginForm("LogOff", "AccountWeb", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav navbar-right">
+            @{
+                BetBusiness bt = new BetBusiness();
+                var user = User.Identity.GetUserName();
+                var num_of_notification = bt.NumberOfBet(user).ToString();
+            }
+
+            <li>
+                @if (num_of_notification.Equals("0"))
+                {
+                    @Html.ActionLink("None Bet", "MyNotUpdateBet", "BetWeb", routeValues: null, htmlAttributes: new { title = "Notification" });
+                }
+                else if (num_of_notification.Equals("1"))
+                {
+                    @Html.ActionLink("One Bet", "MyNotUpdateBet", "BetWeb", routeValues: null, htmlAttributes: new { title = "Notification" });
+                }
+                else
+                {
+                    @Html.ActionLink(num_of_notification + " Bets", "MyNotUpdateBet", "BetWeb", routeValues: null, htmlAttributes: new { title = "Notification" });
+                }
+            </li>
+            <li>
+                @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            </li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        </ul>
+                    }
+                }
+
+                else
+                {
+                    <ul class="nav navbar-nav navbar-right">
+                        @*<li>@Html.ActionLink("Register", "Register", "AccountWeb", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>*@
+                        <li>@Html.ActionLink("Trade with us", "Login", "AccountWeb", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+                    </ul>
+                }
